@@ -7,15 +7,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 
 const (
-	//
-	// MUST SET THESE BEFORE USE!
-	//
-	REDMINE_JSON_URL = ""
-	BOT_REDMINE_KEY  = ""
+	REDMINE_URL      = os.Getenv("REDMINE_URL")
+	REDMINE_JSON_URL = REDMINE_URL + "/issues.json"
+	REDMINE_API_KEY  = os.Getenv("REDMINE_API_KEY")
 )
 
 type Ticket struct {
@@ -99,7 +98,7 @@ func CreateTicket(ticket *Ticket) (*http.Response, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error POSTing JSON: %v", err)
 	}
-	req.Header.Add("X-Redmine-API-Key", BOT_REDMINE_KEY)
+	req.Header.Add("X-Redmine-API-Key", REDMINE_API_KEY)
 	req.Header.Add("Content-Type", "application/json")
 	resp, err := client.Do(req)
 	if err != nil {

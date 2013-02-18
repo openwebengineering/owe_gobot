@@ -4,6 +4,7 @@
 package main
 
 import (
+	"./redmine"
 	"encoding/json"
 	"fmt"
 	"github.com/elimisteve/fun"
@@ -12,8 +13,8 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"os"
 	"os/exec"
-	"./redmine"
 	"regexp"
 	"strings"
 	"time"
@@ -40,7 +41,7 @@ const (
 	// THIS_SERVER_NAME   = "the Linode box"
 	// VERBOSE            = false
 
-	REDMINE_URL        = ""
+	REDMINE_URL        = os.Getenv("REDMINE_URL")
 	REPO_BASE_PATH     = "/home/ubuntu/openwebengineering_code/"
 	OWNER_NICK         = "elimisteve"
 
