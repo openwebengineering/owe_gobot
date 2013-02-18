@@ -96,6 +96,9 @@ func CreateTicket(ticket *Ticket) (*http.Response, error) {
 
 	client := &http.Client{}
 	req, err := http.NewRequest("POST", REDMINE_JSON_URL, reader)
+	if err != nil {
+		return nil, fmt.Errorf("Error POSTing JSON: %v", err)
+	}
 	req.Header.Add("X-Redmine-API-Key", BOT_REDMINE_KEY)
 	req.Header.Add("Content-Type", "application/json")
 	resp, err := client.Do(req)
