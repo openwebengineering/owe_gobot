@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-const (
+var (
 	REDMINE_URL      = os.Getenv("REDMINE_URL")
 	REDMINE_JSON_URL = REDMINE_URL + "/issues.json"
 	REDMINE_API_KEY  = os.Getenv("REDMINE_API_KEY")

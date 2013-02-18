@@ -41,7 +41,6 @@ const (
 	// THIS_SERVER_NAME   = "the Linode box"
 	// VERBOSE            = false
 
-	REDMINE_URL        = os.Getenv("REDMINE_URL")
 	REPO_BASE_PATH     = "/home/ubuntu/openwebengineering_code/"
 	OWNER_NICK         = "elimisteve"
 
@@ -55,8 +54,11 @@ const (
 	REVENGE_MSG        = "I never forgive. I never forget."
 )
 
-var NICKS_TO_NOTIFY = []string{"elimisteve", "elimisteve1", "elimisteve11",
-                               "elimisteve12"}
+var (
+	NICKS_TO_NOTIFY = []string{"elimisteve", "elimisteve1", "elimisteve11",
+        "elimisteve12"}
+	REDMINE_URL = os.Getenv("REDMINE_URL")
+)
 
 type GitCommit struct {
 	Author string
