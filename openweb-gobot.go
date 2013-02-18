@@ -73,13 +73,19 @@ func checkError(where string, err error) {
 	}
 }
 
-// Only one connection allowed (subject to change)
-var conn net.Conn
+var (
+	// Only one connection allowed (subject to change)
+	conn net.Conn
 
-// Anything passed to this channel is echoed into IRC_CHANNEL
-var irc = make(chan string)
+	// Anything passed to this channel is echoed into IRC_CHANNEL
+	irc = make(chan string)
 
-var revenge = []string{}
+	// Users to seek revenge against
+	revenge = []string{}
+
+	// Messages users leave for each other
+	answeringMachine = map[string][]string{}
+)
 
 func main() {
 	// If the constants are valid, this program cannot crash. Period.
@@ -207,6 +213,33 @@ func main() {
 				}()
 			}
 		}
+		//
+		// Check for messages from other users; send them
+		//
+		for _, oldMsg := range answeringMachine[nick] {
+			irc <- oldMsg
+		}
+		delete(answeringMachine, nick)
+		//
+		// Save user messages to each other
+		//
+		if strings.HasPrefix(msg, "!msg ") {
+			// "!msg elimisteve,ajvb,swiss Check this out: ..."
+			// nicksAndText == "elimisteve,ajvb,swiss Check this out: ..."
+			nicksAndText := strings.SplitN(msg[len("!msg "):], " ", 2)
+			if len(nicksAndText) == 2 {
+				nicks := strings.Split(nicksAndText[0], ",")
+				text := nicksAndText[1]
+				text += fmt.Sprintf(" (from %s at %s)", nick, time.Now())
+				for _, n := range nicks {
+					answeringMachine[n] = append(answeringMachine[n], text)
+				}
+				irc <- nick + ": message(s) saved"
+			} else {
+				irc <- "Missing nicks or message"
+			}
+		}
+		//
 		//
 		// ADD YOUR CODE (or function calls) HERE
 		//
