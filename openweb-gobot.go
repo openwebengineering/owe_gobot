@@ -125,7 +125,7 @@ func main() {
 		n, err := conn.Read(read_buf)
 		checkError("conn.Read", err)
 		data := string(read_buf[:n])
-		data = strings.TrimRight(data, " \t\r\n") // Remove trailing whitespace
+		data = strings.TrimRight(data, "\t\r\n") // Remove trailing whitespace
 		fmt.Printf("%v\n", data)
 		//
 		// Respond to PING
