@@ -224,12 +224,18 @@ func main() {
 		// Save user messages to each other
 		//
 		if strings.HasPrefix(msg, "!msg ") {
-			// "!msg elimisteve,ajvb,swiss Check this out: ..."
-			// nicksAndText == "elimisteve,ajvb,swiss Check this out: ..."
-			nicksAndText := strings.SplitN(msg[len("!msg "):], " ", 2)
+			// msg   == "!msg  elimisteve,ajvb,swiss  Check this out: ...  "
+			// body  ==       "elimisteve,ajvb,swiss  Check this out: ..."
+			// nAndT == {"elimisteve,ajvb,swiss", " Check this out: ..."}
+			// nicks == {"elimisteve", "ajvb", "swiss"}
+			// text  == "Check this out: ... (from $SENDER at $TIME)"
+			body := strings.Trim(msg[len("!msg "):], " ")
+			nicksAndText := strings.SplitN(body, " ", 2)
 			if len(nicksAndText) == 2 {
+				// Parse comma-separated list of recipient nicks
 				nicks := strings.Split(nicksAndText[0], ",")
-				text := nicksAndText[1]
+				// Strip leading spaces, add sender and timestamp
+				text := strings.TrimLeft(nicksAndText[1], " ")
 				text += fmt.Sprintf(" (from %s at %s)", nick, time.Now())
 				for _, n := range nicks {
 					answeringMachine[n] = append(answeringMachine[n], text)
