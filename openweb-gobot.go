@@ -195,6 +195,7 @@ func main() {
 					resp, err := redmine.CreateTicket(ticket)
 					if err != nil {
 						irc <- "Ticket creation failed: " + err.Error()
+						return
 					}
 					if resp.StatusCode == 404 {
 						irc <- fmt.Sprintf("Project '%v' not found",
