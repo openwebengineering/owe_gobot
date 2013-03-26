@@ -15,6 +15,7 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
+	"path"
 	"regexp"
 	"strings"
 	"time"
@@ -366,6 +367,7 @@ func gitCommandToOutput(fullRepoPath, command string) string {
     args := strings.Split(command, " ")
 	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Dir = fullRepoPath  // Where cmd is run from
+	repoName := path.Base(fullRepoPath)
 	output, err := cmd.Output()
 	if err != nil {
 		log.Printf("No repo found at '%v'(?). Error: %v\n",
@@ -389,7 +391,9 @@ func gitCommandToOutput(fullRepoPath, command string) string {
 		// Now both /bare and _site have been tried. Giving up.
 
 		if repoList := listRepos(); repoList != "" {
-			ircMsg("Repo not found. Options (probably): " + repoList)
+			reply := fmt.Sprintf("Repo '%v' not found. Options (probably): %v",
+				repoName, repoList)
+			ircMsg(reply)
 		}
 		return ""
 	}
