@@ -28,6 +28,7 @@ type Ticket struct {
 // Maps stated assignee's name to assigned_to_id
 var assigneeToID = map[string]string {
 	"aj":    "15876",
+	"dan":   "17676",
 	"steve": "15872",
 }
 
